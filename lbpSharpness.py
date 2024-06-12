@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from skimage import io
 
 
-
+# Ejecución cmd
 parser = argparse.ArgumentParser(description='create test images from raw dicom')
 parser.add_argument('--input', help='input image where you want to compute sharpness map', required=True)
 
@@ -99,7 +99,7 @@ if __name__=='__main__':
 
     img = cv2.imread(args['input'], cv2.IMREAD_COLOR)
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # COMO SE QUE S Y QUE THRESHOLD COJO?
+    # Vecindario y threshold (vecindario igual que laplaciano)
     #21 0.016 (default)
     
     sharpness_map = lbpSharpness(img_gray, 21, 0.01)
