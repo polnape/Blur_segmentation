@@ -131,29 +131,26 @@ ruta_salida = os.path.join(script_dir, "wavelet3.png")
 # io.imsave(ruta_salida, dilated_image, check_contrast = False)
 #%%
 # OPERADOR LAPLACIANO
-def segmentation_laplacian(gray):
-    def variance_of_laplacian(image):
-    	# compute the Laplacian of the image and then return the focus
-    	# measure, which is simply the variance of the Laplacian
-    	return cv2.Laplacian(image, cv2.CV_64F).var()
+def laplacian_variation(image):
+    # Compute the Laplacian of the image and return the variance
+    laplacian = cv2.Laplacian(image, cv2.CV_64F)
+    variance = np.var(laplacian)
+    return variance
 
+def focus_measure_laplacian(gray_image, neighborhood_size):
+    rows, cols = gray_image.shape
+    laplacian_matrix = np.zeros((rows, cols))
 
-
-
-    N_fils, N_cols = gray.shape
-    size = 30
-    laplacian_matriz = np.zeros((N_fils-(2*size), N_cols-(2*size)))
-
-    for x in range(size, N_fils-size):
-        for y in range(size,N_cols-size):
-            vecinos = gray[x-size:x+size+1, y -size: y+size+1]
-            blur_vecinos = variance_of_laplacian(vecinos)
-            laplacian_matriz[x-size, y-size] = blur_vecinos
-            
+    for x in range(neighborhood_size, rows - neighborhood_size):
+        for y in range(neighborhood_size, cols - neighborhood_size):
+            neighborhood = gray_image[x - neighborhood_size : x + neighborhood_size + 1,
+                                      y - neighborhood_size : y + neighborhood_size + 1]
+            focus_measure = laplacian_variation(neighborhood)
+            laplacian_matrix[x, y] = focus_measure
     
-    return laplacian_matriz
+    return laplacian_matrix
 
-laplaciana = segmentation_laplacian(dilated_image)
+laplaciana = focus_measure_laplacian(dilated_image, 21)
 plt.figure()
 plt.axis("off")
 plt.imshow(laplaciana)
