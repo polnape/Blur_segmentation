@@ -79,7 +79,7 @@ def dwt(image):
   hh = conv(h,highpass_y)#diagonal subband
   return ll, lh, hl, hh
 
-ll0, lh0, hl0 ,hh0 = dwt(image)
+lh0, hl0 ,hh0 = dwt(image)
 
 # plt.figure(figsize=(5,4))
 # plt.subplot(2,2,1), plt.imshow(ll0, cmap='gray')
